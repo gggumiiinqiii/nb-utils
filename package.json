@@ -1,0 +1,11 @@
+{
+  "name": "nb-utils",
+  "version": "1.0.0",
+  "description": "some utils to help you develop more conveniently ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gzeal",
+  "license": "ISC"
+}
