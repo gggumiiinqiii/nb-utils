@@ -2,7 +2,8 @@
 import Format from "./src/format";
 import Validate from "./src/validate";
 import reduceRepeat from "./src/reduceRepeat";
-export { Format, Validate,reduceRepeat };
+import selectFilter from "./src/selectFilter";
+export { Format, Validate,reduceRepeat,selectFilter };
 
 
 
