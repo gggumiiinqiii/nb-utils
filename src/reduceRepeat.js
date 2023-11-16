@@ -17,4 +17,4 @@
       return res
     }
   }
-  export default reduceRepeat
+  export {reduceRepeat} 

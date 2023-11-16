@@ -17,4 +17,4 @@ formatMoney: (money, symbol = "", decimals = 2) =>
     .replace(/^/, `${symbol}`),
 };
 
-export default Format;
+export { Format};

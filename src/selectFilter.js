@@ -17,4 +17,4 @@
     }
     return ![undefined, null, ''].includes(matchArr.find(x => x.indexOf(inputStr) >= 0))
   }
-  export default selectFilter
+  export { selectFilter}
