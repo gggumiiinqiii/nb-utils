@@ -8,6 +8,7 @@
     "build": "rollup -c"
   },
   "type": "module",
+  "types": "index.d.ts",
   "author": "gzeal",
   "license": "ISC",
   "dependencies": {
