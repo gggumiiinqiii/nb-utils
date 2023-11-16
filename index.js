@@ -5,7 +5,3 @@ import reduceRepeat from "./src/reduceRepeat";
 import selectFilter from "./src/selectFilter";
 export { Format, Validate,reduceRepeat,selectFilter };
 
-
-
-
-

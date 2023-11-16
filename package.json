@@ -4,11 +4,18 @@
   "description": "some utils to help you develop more conveniently ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
   },
+  "type": "module",
   "author": "gzeal",
   "license": "ISC",
   "dependencies": {
-    "gzealnb-utils": "^1.0.0"
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "gzealnb-utils": "^1.0.0",
+    "rollup": "^4.4.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
