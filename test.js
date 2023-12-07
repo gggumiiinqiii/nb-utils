@@ -1,4 +1,4 @@
-import {Format} from 'gzealnb-utils';
+import {isEmptyObject} from './index';
 
 // $12,341,234.25
-console.log(Format.mobileCheck(1111))
+console.log(isEmptyObject({a:1}))
