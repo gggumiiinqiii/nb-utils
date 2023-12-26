@@ -46,4 +46,23 @@ export function selectFilter(input, option, keys= 'label') {
 export function isEmptyObject(Obj){
 	return Reflect.ownKeys(Obj).length == 0
 }
- 
+/**
+ * 判断是否为null\undefined\[]\''\{}
+ * @param {*} value 
+ * @returns 
+ */
+export function isEmpty(value) {
+  if (value === null || value === undefined) {
+    return true
+  }
+
+  if (Array.isArray(value) || typeof value === 'string') {
+    return value.length === 0
+  }
+
+  if (typeof value === 'object') {
+    return isEmptyObject(value)
+  }
+
+  return false
+}

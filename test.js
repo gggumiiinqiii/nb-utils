@@ -1,4 +1,4 @@
 import {isEmptyObject} from './index';
 
-// $12,341,234.25
+// 需要先执行npm run build
 console.log(isEmptyObject({a:1}))
