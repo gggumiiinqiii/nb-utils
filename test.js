@@ -1,4 +1,4 @@
-import {isEmptyObject} from './index';
+import {findContinuousIntersectionDP} from './index';
 
 // 需要先执行npm run build
-console.log(isEmptyObject({a:1}))
+console.log(findContinuousIntersectionDP('aa','aab'))

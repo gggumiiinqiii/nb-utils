@@ -127,3 +127,6 @@ export function findContinuousIntersectionDP(str1, str2) {
   // 返回最长公共子串
   return str1.substring(endIndex - maxLength, endIndex);
 }
+export function log(value){
+  console.log(value)
+}
