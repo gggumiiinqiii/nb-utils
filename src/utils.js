@@ -127,6 +127,17 @@ export function findContinuousIntersectionDP(str1, str2) {
   // 返回最长公共子串
   return str1.substring(endIndex - maxLength, endIndex);
 }
-export function log(value){
-  console.log(value)
+/**
+ * 计算数字的每个位数的指定次方的合
+ * @param {*} num  输入的数字。
+ * @param {*} pow 指定的次方，默认为2。
+ * @returns  返回每个位数的指定次方的和。
+ */
+export const calculateSumOfSquares = (num,pow=2) => {
+  let sum = 0
+  while (num > 0) {
+    sum += Math.pow(num % 10, pow)
+    num = Math.floor(num / 10)
+  }
+  return sum
 }
