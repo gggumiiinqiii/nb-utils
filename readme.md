@@ -19,7 +19,7 @@ npm publish
 npm run build ->go to dist to run
 
 ### 如何使用这个工具库
-npm install nb-utils
+npm i gzealnb-utils
 ```js
     import {calculateSumOfSquares} from 'nb-utils'
 ```
