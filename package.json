@@ -1,6 +1,6 @@
 {
   "name": "gzealnb-utils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "some utils to help you develop more conveniently ",
   "main": "index.js",
   "scripts": {
