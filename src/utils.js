@@ -141,3 +141,25 @@ export const calculateSumOfSquares = (num,pow=2) => {
   }
   return sum
 }
+export const resize = ()=>{
+  const threshold = 100
+  let widthThreshold = window.outerWidth - window.innerWidth > threshold;
+  let heightThreshold = window.outerHeight - window.innerHeight > threshold;
+  if(widthThreshold || heightThreshold){
+    console.log('控制台打开了')
+  }
+  //  window.addEventListener("resize", resize);
+}
+//只保留树中包含在 idsToKeep 数组中的节点以及它们的所有父节点。
+export function filterTree(tree, idsToKeep) {
+  return tree.reduce((acc, node) => {
+    const newNode = { ...node }
+    if (node.children) {
+      newNode.children = filterTree(node.children, idsToKeep)
+    }
+    if (idsToKeep.includes(node.id) || (newNode.children && newNode.children.length > 0)) {
+      acc.push(newNode)
+    }
+    return acc
+  }, [])
+}
