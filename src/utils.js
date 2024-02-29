@@ -163,3 +163,101 @@ export function filterTree(tree, idsToKeep) {
     return acc
   }, [])
 }
+/**
+ * 数字计算
+ * @param {*} s 
+ * @returns 
+ */
+export function calculate(s) {
+  if (!isValidExpression(s)) {
+    return '非法计算表达式'
+  }
+  let stackNum = [] // 存储数字的栈
+  let stackOp = [] // 存储运算符的栈
+  let num = 0
+  let sign = 1 // 符号位，默认为正数
+  let result = 0
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i]
+    if (!isNaN(parseInt(char))) {
+      num = num * 10 + parseInt(char)
+    } else if (char === '+') {
+      result += sign * num
+      num = 0
+      sign = 1
+    } else if (char === '-') {
+      result += sign * num
+      num = 0
+      sign = -1
+    } else if (char === '*') {
+      // 处理乘法运算
+      const nextNum = parseInt(s[i + 1])
+      num *= nextNum
+      i++ // 跳过下一个数字字符
+    } else if (char === '/') {
+      // 处理除法运算
+      const nextNum = parseInt(s[i + 1])
+      num = Math.floor(num / nextNum) // 使用 floor 取整，保留整数部分
+      i++ // 跳过下一个数字字符
+    } else if (char === '(') {
+      stackNum.push(result)
+      stackOp.push(sign)
+      result = 0
+      sign = 1
+    } else if (char === ')') {
+      result += sign * num
+      result *= stackOp.pop()
+      result += stackNum.pop()
+      num = 0
+    }
+  }
+
+  return result + sign * num
+}
+/**
+ * 表达式校验
+ * @param {*} s 
+ * @returns 
+ */
+export function isValidExpression(s) {
+  let stack = []
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i]
+
+    if (char === '(') {
+      stack.push(char)
+    } else if (char === ')') {
+      if (stack.length === 0 || stack.pop() !== '(') {
+        return false // 括号不匹配
+      }
+    } else if (char === '+' || char === '-' || char === '*' || char === '/') {
+      // 运算符的前后应该有数字，或者前一个字符为右括号，后一个字符为左括号
+      if ((i === 0 || isNaN(parseInt(s[i - 1]))) && s[i - 1] !== ')') {
+        return false
+      }
+      if ((i === s.length - 1 || isNaN(parseInt(s[i + 1]))) && s[i + 1] !== '(') {
+        return false
+      }
+    } else if (!isNaN(parseInt(char))) {
+      // 检查数字的格式
+      let j = i + 1
+      while (j < s.length && !isNaN(parseInt(s[j]))) {
+        j++
+      }
+      if (j < s.length && s[j] === '(') {
+        return false // 数字后面不能直接跟左括号
+      }
+      i = j - 1
+    } else if (char !== ' ') {
+      return false // 非法字符
+    }
+  }
+
+  if (stack.length > 0) {
+    return false // 括号不匹配
+  }
+
+  return true
+}
