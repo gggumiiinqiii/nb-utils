@@ -1,5 +1,3 @@
-
-
   // c. validate.js 校验文件
 // 解决toFixed保留小数的问题
 const formatToFixed = (money, decimals = 2) => {
@@ -16,5 +14,6 @@ formatMoney: (money, symbol = "", decimals = 2) =>
     .replace(/\B(?=(\d{3})+\b)/g, ",")
     .replace(/^/, `${symbol}`),
 };
+
 
 export { Format};
