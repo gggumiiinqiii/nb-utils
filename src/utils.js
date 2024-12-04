@@ -327,3 +327,19 @@ export function computerMemoryUnit(size) {
 
   return formattedSize + units[unitIndex];
 }
+/**
+ * 数组去重
+ * @param {*} arr 
+ * @returns 
+ */
+export function unique  (arr)  {
+  const map = new Map();
+  const result = [];
+  for (let item of arr) {
+    if (!map.has(item)) {
+      map.set(item, true);
+      result.push(item);
+    }
+  }
+  return result;
+};
