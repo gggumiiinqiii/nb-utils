@@ -301,4 +301,29 @@ export function compareVersion(v1, v2) {
 
   return 0
 }
+/**
+ * 内存大小转成带有单位的数值
+ * @param {*} size 
+ * @returns 
+ */
+export function computerMemoryUnit(size) {
+  if (!size) return '';
+  
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let unitIndex = 0;
 
+  while (size >= 1024 && unitIndex < units.length - 1) {
+      size /= 1024;
+      unitIndex++;
+  }
+
+  // 保留两位小数，并转换成字符串
+  let formattedSize = size.toFixed(2);
+
+  // 去掉小数部分为00的情况
+  if (formattedSize.endsWith('.00')) {
+      formattedSize = formattedSize.slice(0, formattedSize.indexOf('.'));
+  }
+
+  return formattedSize + units[unitIndex];
+}
