@@ -1,6 +1,6 @@
 
 import resolve from '@rollup/plugin-node-resolve';
-
+//import terser from '@rollup/plugin-terser';
 const buildOptions = {
   input: ["test.js"],
   output: [
@@ -18,7 +18,8 @@ const buildOptions = {
   plugins: [
     resolve({
       modules: true
-    })
+    }),
+ //   terser()
   ]
 };
 export default buildOptions;
