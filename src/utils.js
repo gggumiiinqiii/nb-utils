@@ -388,3 +388,26 @@ export function urLucky(drawCount) {
 
   return Array.from(winners);
 }
+/**
+ * 不用跑定时任务，计算差值就可以了
+ */
+export function setHappyMessage() {
+  // 获取当前时间
+  const now = new Date();
+
+  // 设置目标时间：5月20日 13:14
+  const targetDate = new Date(now.getFullYear(), 4, 20, 13, 14, 0, 0); // 月份从0开始，5月是4
+
+  // 如果目标时间已经过去，设置目标时间为明年的 5 月 20 日 13:14
+  if (now > targetDate) {
+    targetDate.setFullYear(now.getFullYear() + 1);
+  }
+
+  // 计算到目标时间的毫秒差
+  const timeDiff = targetDate - now;
+  console.log(timeDiff);
+  // 使用 setTimeout 来设置定时任务
+  setTimeout(function () {
+    console.log("happy!");
+  }, timeDiff);
+}
