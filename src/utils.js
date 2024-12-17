@@ -343,3 +343,40 @@ export function unique  (arr)  {
   }
   return result;
 };
+/**
+ * 基于权重的抽奖算法
+ * @param {*} drawCount 
+ * @returns 
+ */
+export function urLucky(drawCount) {
+  const jsonQuiz = [
+      { "username": "张三", "times": 24 },
+      { "username": "李四", "times": 1 },
+      { "username": "王二", "times": 6 },
+      { "username": "麻子", "times": 9 }
+  ];
+
+  // 计算总权重
+  const totalTimes = jsonQuiz.reduce((sum, person) => sum + person.times, 0);
+
+  // 创建权重分布数组
+  const weightedPool = [];
+  jsonQuiz.forEach(person => {
+      const weight = person.times / totalTimes;
+      //四舍五入函数，按照概率，在10000条数据中分配
+      for (let i = 0; i < Math.round(weight * 10000); i++) {
+          weightedPool.push(person.username);
+      }
+  });
+  // 0 - 9999
+  console.log(weightedPool)
+  // 抽奖,set是去重的
+  const winners = new Set();
+  while (winners.size < drawCount) {
+     //大于等于0 小于1
+      const randomIndex = Math.floor(Math.random() * weightedPool.length);
+      winners.add(weightedPool[randomIndex]);
+  }
+
+  return Array.from(winners);
+}
