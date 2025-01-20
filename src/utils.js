@@ -411,3 +411,19 @@ export function setHappyMessage() {
     console.log("happy!");
   }, timeDiff);
 }
+
+export function formatAmount(amount, unit = "元") {
+  unit === "分" ? (amount /= 100) : "";
+  // 格式化整数部分，并加上千位分隔符
+  let [integer, decimal] = String(amount).split(".");
+
+  // 处理整数部分的千位分隔符
+  integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (!decimal) {
+    decimal = "00";
+  } else if (decimal.length == 1) {
+    decimal = decimal + "0";
+  }
+  // 返回格式化后的金额
+  return `${integer}.${decimal}`;
+}

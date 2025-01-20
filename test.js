@@ -1,4 +1,4 @@
-import {findContinuousIntersectionDP,mapObject,mapObjectSkip} from './index';
+import {findContinuousIntersectionDP,mapObject,mapObjectSkip,calculate} from './index';
 
 // 需要先执行npm run build
 console.log(findContinuousIntersectionDP('aa','aab'))
@@ -13,3 +13,4 @@ const newObject2 = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key
 
 const newObject3 = mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
 //=> {one: 1}
+console.log(calculate('2*3'))

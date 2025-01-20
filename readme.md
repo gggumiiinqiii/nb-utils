@@ -1,23 +1,3 @@
-nb-utils
-### check you registry
-// show your rigistry
-npm config get registry
-// shoult set default npm registry to publish
-npm config set registry https://registry.npmjs.org/
-// set npm registry as taobao regisrty
-npm config set registry https://registry.npmmirror.com/
-### how to publish
-//  v1.0.0->v1.0.1
-npm version patch 
-//  v1.0.0->v1.1.0
-npm version minor
-//  v1.0.0->v2.0.0
-npm version major
-
-npm publish
-###  how to test
-npm run build ->go to dist to run
-
 ### 如何使用这个工具库
 npm i gzealnb-utils
 ```js
@@ -29,4 +9,9 @@ npm i gzealnb-utils
 -------- | ----- | ----- | ----
 selectFilter  | (用户输入得值,可供选择得参数,需要匹配得参数支持字符串和字符串数组) |匹配到得数组 | 用于a-select组件得前端搜索
 reduceRepeat  | (数组对象,key值)|数组对象 | 根据key值对数组对象去重
-calculateSumOfSquares  | (输入得数字,指定的次方默认为2)|返回每个位数的指定次方的和 |
+calculateSumOfSquares  | (2:number,5:number)|32 | 计算数字的每个位数的指定次方的合
+calculate  | ('2*2':string) | 4 | 算术表达式支持+-*/()
+compareVersion | ('1.11.0':string,'1.9.9':String) | 1 | 比较两个版本的大小，v1>v2返回1，v1小于v2返回-1,v1等于v2返回0
+computerMemoryUnit | (1024:number) | '1KB' |内存大小转成带有单位的数值,默认是一个字节
+unique | ([1,2,3,1]) | [1,2,3] |数组去除
+formatAmount | (1000,'分') | 10.00 | 金额转换不足补0，不会四舍五入,支持分转元
