@@ -270,7 +270,7 @@ export function isValidExpression(s) {
   return true;
 }
 /**
- * 莫运算:-7 mod 3 =2
+ * 模运算:-7 mod 3 =2
  * @param {*} a
  * @param {*} b
  * @returns
@@ -411,7 +411,12 @@ export function setHappyMessage() {
     console.log("happy!");
   }, timeDiff);
 }
-
+/**
+ * 金额格式化
+ * @param {*} amount
+ * @param {*} unit
+ * @returns
+ */
 export function formatAmount(amount, unit = "元") {
   unit === "分" ? (amount /= 100) : "";
   // 格式化整数部分，并加上千位分隔符
@@ -426,4 +431,110 @@ export function formatAmount(amount, unit = "元") {
   }
   // 返回格式化后的金额
   return `${integer}.${decimal}`;
+}
+/**
+ * 防抖
+ * @param {*} fn
+ * @param {*} delay
+ * @returns
+ */
+export function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+/**
+ * 节流
+ * @param {*} fn
+ * @param {*} interval
+ */
+export function throttle(fn, dealy) {
+  let lastTime = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastTime > dealy) {
+      fn(...args);
+      lastTime = now;
+    }
+  };
+}
+/**
+ * 二进制文件导出
+ * @param {*} res
+ * @param {*} name
+ */
+export function downloadContent(res, name = "") {
+  const data = res.data;
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement("a");
+  if (!name) {
+    if (res.headers && res.headers["content-disposition"]) {
+      name = decodeURI(
+        res.headers["content-disposition"].split(";")[1].split("=")[1]
+      );
+    }
+  }
+  link.style.display = "none";
+  link.href = url;
+  link.setAttribute("download", name);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+/**
+ * uuid
+ * @returns
+ */
+export function uuid() {
+  function S4() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  }
+  return (
+    S4() +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    S4() +
+    S4()
+  );
+}
+function isPlainObject(obj) {
+  return (
+    typeof obj === "object" &&
+    Object.prototype.toString.call(obj) === "[object Object]"
+  );
+}
+/**
+ * 是否是相同对象
+ * @param {*} initObj
+ * @param {*} sourseObj
+ * @returns
+ */
+export function isEqualObject(initObj, sourseObj) {
+  if (!isPlainObject(initObj) || !isPlainObject(sourseObj)) {
+    return initObj === sourseObj;
+  }
+  if (Object.keys(initObj).length !== Object.keys(sourseObj).length) {
+    return false;
+  }
+  for (const key in initObj) {
+    if (isPlainObject(initObj[key]) && isPlainObject(sourseObj[key])) {
+      if (!isEqualObject(initObj[key], sourseObj[key])) {
+        return false;
+      }
+    } else if (initObj[key] !== sourseObj[key]) {
+      return false;
+    }
+  }
+  return true;
 }
