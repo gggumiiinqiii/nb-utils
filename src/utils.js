@@ -538,3 +538,15 @@ export function isEqualObject(initObj, sourseObj) {
   }
   return true;
 }
+
+export async function repeatFn(task, count = 1, millSecond = 1000) {
+  async function wait() {
+    return new Promise((res) => {
+      setTimeout(res, millSecond);
+    });
+  }
+  while (count--) {
+    await wait();
+    task();
+  }
+}
