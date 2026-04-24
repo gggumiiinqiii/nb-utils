@@ -1,16 +1,19 @@
-import {findContinuousIntersectionDP,mapObject,mapObjectSkip,calculate} from './index';
+import { EventBus } from "./index";
 
-// 需要先执行npm run build
-console.log(findContinuousIntersectionDP('aa','aab'))
-const newObject = mapObject({foo: 'bar'}, (key, value) => [value, key]);
-//=> {bar: 'foo'}
+const bus = new EventBus();
 
-const newObject1 = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value]);
-//=> {foo: true, bar: {bAz: true}}
+// 1. 订阅消息
+const welcomeHandler = (name) => console.log(`Hello, ${name}!`);
+bus.on("greet", welcomeHandler);
 
-const newObject2 = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value], {deep: true});
-//=> {foo: true, bar: {baz: true}}
+// 2. 发布消息
+bus.emit("greet", "Gemini"); // 输出: Hello, Gemini!
 
-const newObject3 = mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
-//=> {one: 1}
-console.log(calculate('2*3'))
+// 3. 一次性订阅
+bus.once("prize", (item) => console.log(`恭喜获得: ${item}`));
+bus.emit("prize", "新款手机"); // 输出: 恭喜获得: 新款手机
+bus.emit("prize", "新款电脑"); // (无输出，因为已销毁)
+
+// 4. 取消订阅
+bus.off("greet", welcomeHandler);
+bus.emit("greet", "World"); // (无输出)

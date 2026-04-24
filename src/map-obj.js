@@ -28,7 +28,7 @@ const _mapObject = (object, mapper, options, isSeen = new WeakMap()) => {
     array.map((element) =>
       isObjectCustom(element)
         ? _mapObject(element, mapper, options, isSeen)
-        : element
+        : element,
     );
   if (Array.isArray(object)) {
     return mapArray(object);
@@ -59,7 +59,7 @@ const _mapObject = (object, mapper, options, isSeen = new WeakMap()) => {
 export function mapObject(object, mapper, options) {
   if (!isObject(object)) {
     throw new TypeError(
-      `Expected an object, got \'${object}'\ (${typeof object})`
+      `Expected an object, got \'${object}'\ (${typeof object})`,
     );
   }
   if (Array.isArray(object)) {

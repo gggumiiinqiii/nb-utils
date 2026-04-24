@@ -15,3 +15,6 @@ compareVersion | ('1.11.0':string,'1.9.9':String) | 1 | 比较两个版本的大
 computerMemoryUnit | (1024:number) | '1KB' |内存大小转成带有单位的数值,默认是一个字节
 unique | ([1,2,3,1]) | [1,2,3] |数组去除
 formatAmount | (1000,'分') | 10.00 | 金额转换不足补0，不会四舍五入,支持分转元
+downloadContent| 1 | 需要被下载的文件 | 通过https接口请求返回的二进制文件进行下载导出功能
+isEqualObject |([1],[1]) | true | 校验是否是相同的对象
+repeatFn |(function(){console.log('run')},10,1000) | 无| 重复执行某个函数

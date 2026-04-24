@@ -16,7 +16,7 @@ export function selectFilter(input, option, keys = "label") {
     matchArr.push(option[keys].toString().toLowerCase());
   }
   return ![undefined, null, ""].includes(
-    matchArr.find((x) => x.indexOf(inputStr) >= 0)
+    matchArr.find((x) => x.indexOf(inputStr) >= 0),
   );
 }
 /**
@@ -474,7 +474,7 @@ export function downloadContent(res, name = "") {
   if (!name) {
     if (res.headers && res.headers["content-disposition"]) {
       name = decodeURI(
-        res.headers["content-disposition"].split(";")[1].split("=")[1]
+        res.headers["content-disposition"].split(";")[1].split("=")[1],
       );
     }
   }
