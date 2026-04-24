@@ -1,23 +1,28 @@
 {
   "name": "gzealnb-utils",
-  "version": "1.0.8",
-  "description": "some utils to help you develop more conveniently ",
-  "main": "index.js",
+  "version": "1.0.9",
+  "description": "some utils to help you develop more conveniently",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "test": "node test.js",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
   },
   "type": "module",
   "types": "index.d.ts",
   "author": "gzeal",
   "license": "ISC",
-  "dependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "gzealnb-utils": "^1.0.0",
-    "rollup": "^4.4.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup": "^4.4.1"
   }
 }

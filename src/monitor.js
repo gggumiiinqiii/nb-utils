@@ -1,5 +1,6 @@
 // 报错start
 export const on = function (event, fn, remove) {
+  if (typeof window === 'undefined') return;
   console.log("on156", window.addEventListener);
   window.addEventListener
     ? window.addEventListener(
@@ -17,7 +18,11 @@ export const Config = {
     appVersion: '1.0.0',
     token: 'sfaf',
     environment: 'production',
-    useragent: window.navigator.userAgent.toLowerCase(),
+    get useragent() {
+      return typeof window !== 'undefined'
+        ? window.navigator.userAgent.toLowerCase()
+        : '';
+    },
   }
 export function getCommonMsg() {
   let u = navigator.connection;
@@ -42,7 +47,9 @@ export function getCommonMsg() {
 }
 // 获取页面
 function getPage() {
-  return location.pathname.toLowerCase();
+  return typeof location !== 'undefined'
+    ? location.pathname.toLowerCase()
+    : '';
 }
 // 获取浏览器默认语言
 function getLang() {
@@ -56,8 +63,9 @@ function getScreen() {
   let h = document.documentElement.clientHeight || document.body.clientHeight;
   return w + "x" + h;
 }
-// 获取uid
+// 获取 uid
 function getUid() {
+  if (typeof localStorage === 'undefined') return '';
   let uid = localStorage.getItem("bombay_uid") || "";
   if (!uid) {
     uid = randomString();
@@ -87,21 +95,9 @@ export function handleErr(error) {
   }
   //setGlobalHealth('error')
 }
-//防抖处理报错开始
-// 防抖函数
-function debounce(fn, delay) {
-  let lastTime = 0;
-  return function (...args) {
-    console.log("aa", args);
-    const now = Date.now();
-    if (now - lastTime >= delay) {
-      lastTime = now;
-      // apply是数组把数组的第一个传递给函数的第一个参数
-      // call是传a,b,c在传递给对应函数的入参
-      fn.apply(this, args);
-    }
-  };
-}
+import { debounce } from "./utils.js";
+
+// 防抖处理报错开始
 // 使用防抖机制包装错误处理函数，设置处理间隔为 2 秒（2000 毫秒）
 export const debouncedHandleErr = debounce(handleErr, 2000);
 // 设置处理间隔为 30 分钟（1800000 毫秒）

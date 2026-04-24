@@ -10,14 +10,18 @@ export function selectFilter(input, option, keys = "label") {
   const matchArr = [];
   if (Array.isArray(keys)) {
     keys.forEach((key) => {
-      matchArr.push(option[key].toString().toLowerCase());
+      const val = option[key];
+      if (val != null) {
+        matchArr.push(val.toString().toLowerCase());
+      }
     });
   } else {
-    matchArr.push(option[keys].toString().toLowerCase());
+    const val = option[keys];
+    if (val != null) {
+      matchArr.push(val.toString().toLowerCase());
+    }
   }
-  return ![undefined, null, ""].includes(
-    matchArr.find((x) => x.indexOf(inputStr) >= 0),
-  );
+  return matchArr.some((x) => x.indexOf(inputStr) >= 0);
 }
 /**
  * 根据key值去重
@@ -169,56 +173,129 @@ export function filterTree(tree, idsToKeep) {
   }, []);
 }
 /**
- * 数字计算
- * @param {*} s
- * @returns
+ * 数字计算（支持 + - * / ( )，多位数）
+ * 底层基于 BigInt 做精确整数运算，先乘除后加减，处理括号优先级
+ * @param {string} s - 算术表达式，如 '2*3+4','12*(3+5)'
+ * @returns {number|string} 计算结果，或错误提示字符串
  */
 export function calculate(s) {
   if (!isValidExpression(s)) {
     return "非法计算表达式";
   }
-  let stackNum = []; // 存储数字的栈
-  let stackOp = []; // 存储运算符的栈
-  let num = 0;
-  let sign = 1; // 符号位，默认为正数
-  let result = 0;
 
-  for (let i = 0; i < s.length; i++) {
-    const char = s[i];
-    if (!isNaN(parseInt(char))) {
-      num = num * 10 + parseInt(char);
-    } else if (char === "+") {
-      result += sign * num;
-      num = 0;
-      sign = 1;
-    } else if (char === "-") {
-      result += sign * num;
-      num = 0;
-      sign = -1;
-    } else if (char === "*") {
-      // 处理乘法运算
-      const nextNum = parseInt(s[i + 1]);
-      num *= nextNum;
-      i++; // 跳过下一个数字字符
-    } else if (char === "/") {
-      // 处理除法运算
-      const nextNum = parseInt(s[i + 1]);
-      num = Math.floor(num / nextNum); // 使用 floor 取整，保留整数部分
-      i++; // 跳过下一个数字字符
-    } else if (char === "(") {
-      stackNum.push(result);
-      stackOp.push(sign);
-      result = 0;
-      sign = 1;
-    } else if (char === ")") {
-      result += sign * num;
-      result *= stackOp.pop();
-      result += stackNum.pop();
-      num = 0;
+  // 将中缀表达式转为 token 数组
+  const tokens = tokenize(s);
+
+  // 将中缀转后缀（调度场算法）
+  const output = shuntingYard(tokens);
+
+  // 计算后缀表达式
+  return evaluateRPN(output);
+}
+
+/**
+ * 将表达式字符串拆分为 token 数组
+ * @param {string} s
+ * @returns {Array<{type: 'number'|'op'|'paren', value: string}>}
+ */
+function tokenize(s) {
+  const tokens = [];
+  let i = 0;
+  while (i < s.length) {
+    const ch = s[i];
+    if (ch === " ") {
+      i++;
+      continue;
+    }
+    if (/\d/.test(ch)) {
+      let num = "";
+      while (i < s.length && /\d/.test(s[i])) {
+        num += s[i];
+        i++;
+      }
+      tokens.push({ type: "number", value: num });
+    } else if ("+-*/".includes(ch)) {
+      tokens.push({ type: "op", value: ch });
+      i++;
+    } else if (ch === "(" || ch === ")") {
+      tokens.push({ type: "paren", value: ch });
+      i++;
+    } else {
+      i++;
+    }
+  }
+  return tokens;
+}
+
+/**
+ * 调度场算法：中缀表达式转后缀表达式（逆波兰表示法）
+ * @param {Array} tokens
+ * @returns {Array}
+ */
+function shuntingYard(tokens) {
+  const precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
+  const output = [];
+  const opStack = [];
+
+  for (const token of tokens) {
+    if (token.type === "number") {
+      output.push(token);
+    } else if (token.type === "op") {
+      while (
+        opStack.length > 0 &&
+        opStack[opStack.length - 1] !== "(" &&
+        precedence[opStack[opStack.length - 1]] >= precedence[token.value]
+      ) {
+        output.push({ type: "op", value: opStack.pop() });
+      }
+      opStack.push(token.value);
+    } else if (token.value === "(") {
+      opStack.push("(");
+    } else if (token.value === ")") {
+      while (opStack.length > 0 && opStack[opStack.length - 1] !== "(") {
+        output.push({ type: "op", value: opStack.pop() });
+      }
+      opStack.pop(); // 丢掉左括号
     }
   }
 
-  return result + sign * num;
+  while (opStack.length > 0) {
+    output.push({ type: "op", value: opStack.pop() });
+  }
+
+  return output;
+}
+
+/**
+ * 计算逆波兰表达式
+ * @param {Array} rpn
+ * @returns {number}
+ */
+function evaluateRPN(rpn) {
+  const stack = [];
+  for (const token of rpn) {
+    if (token.type === "number") {
+      stack.push(BigInt(token.value));
+    } else if (token.type === "op") {
+      const b = stack.pop();
+      const a = stack.pop();
+      switch (token.value) {
+        case "+":
+          stack.push(a + b);
+          break;
+        case "-":
+          stack.push(a - b);
+          break;
+        case "*":
+          stack.push(a * b);
+          break;
+        case "/":
+          stack.push(a / b);
+          break;
+      }
+    }
+  }
+  return Number(stack.pop());
 }
 /**
  * 表达式校验
@@ -315,9 +392,10 @@ export function compareVersion(v1, v2) {
  * @returns
  */
 export function computerMemoryUnit(size) {
-  if (!size) return "";
+  if (size === 0) return "0B";
+  if (size == null || isNaN(size)) return "";
 
-  const units = ["B", "KB", "MB", "GB"];
+  const units = ["B", "KB", "MB", "GB", "TB"];
   let unitIndex = 0;
 
   while (size >= 1024 && unitIndex < units.length - 1) {
@@ -515,27 +593,45 @@ function isPlainObject(obj) {
   );
 }
 /**
- * 是否是相同对象
+ * 深度比较两个值是否相等（支持对象、数组、Date、基本类型）
  * @param {*} initObj
  * @param {*} sourseObj
- * @returns
+ * @returns {boolean}
  */
 export function isEqualObject(initObj, sourseObj) {
-  if (!isPlainObject(initObj) || !isPlainObject(sourseObj)) {
-    return initObj === sourseObj;
+  // 同一引用
+  if (initObj === sourseObj) return true;
+
+  // 其中一个是 null/undefined
+  if (initObj == null || sourseObj == null) return false;
+
+  // Date 比较
+  if (initObj instanceof Date && sourseObj instanceof Date) {
+    return initObj.getTime() === sourseObj.getTime();
   }
-  if (Object.keys(initObj).length !== Object.keys(sourseObj).length) {
+
+  // 数组比较
+  if (Array.isArray(initObj) && Array.isArray(sourseObj)) {
+    if (initObj.length !== sourseObj.length) return false;
+    return initObj.every((val, i) => isEqualObject(val, sourseObj[i]));
+  }
+
+  // 非对象（基本类型）
+  if (typeof initObj !== "object" || typeof sourseObj !== "object") {
     return false;
   }
-  for (const key in initObj) {
-    if (isPlainObject(initObj[key]) && isPlainObject(sourseObj[key])) {
-      if (!isEqualObject(initObj[key], sourseObj[key])) {
-        return false;
-      }
-    } else if (initObj[key] !== sourseObj[key]) {
-      return false;
-    }
+
+  // 对象比较
+  const keys1 = Object.keys(initObj);
+  const keys2 = Object.keys(sourseObj);
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (const key of keys1) {
+    if (!sourseObj.hasOwnProperty(key)) return false;
+    if (!isEqualObject(initObj[key], sourseObj[key])) return false;
   }
+
   return true;
 }
 

@@ -35,7 +35,7 @@ class EventBus {
     if (!this.events[type]) return;
     if (!handler) {
       // 如果没传具体的 handler，直接清空该事件的所有订阅
-      this.events[tpye] = [];
+      this.events[type] = [];
     } else {
       // 过滤掉匹配的函数
       this.events[type] = this.events[type].filter((h) => h !== handler);
